@@ -63,7 +63,15 @@ class Main extends Component {
             let note = { text: snapshot.val(), id: snapshot.key };
             // if new note is added, it will get notified and refresh the page
             this.setState({ notes: [note].concat(this.state.notes) });
-        })
+        });
+        // notesRef.on('child_removed', snapshot => {
+        //     let deletedNote = { text: snapshot.val(), id: snapshot.key };
+        //     console.log("The blog post titled '" + deletedNote.text + "' has been deleted");
+        //     const index = this.state.notes.findIndex(x => x.text === deletedNote.text)
+        //     console.log('index: ', index);
+        //     console.log('note: ', deletedNote);
+        //     this.setState({ notes: this.state.notes.splice(index, 1) });
+        // });
     }
 
     handleChange = name => event => {
@@ -72,7 +80,6 @@ class Main extends Component {
         });
     };
 
-
     addNote(e) {
         e.preventDefault();
         const uid = auth.currentUser.uid;
@@ -80,14 +87,14 @@ class Main extends Component {
         this.setState({ current : "" });
     }
 
-    deleteNote(key) {
-        // key.preventDefault();
-        console.log("here");
+    deleteNote(noteid, index) {
         const uid = auth.currentUser.uid;
-        console.log(uid);
-        console.log(key);
-        db.ref('notes/' + uid + '/' + key).remove();
-        // this.setState({ current : "" });
+        db.ref('notes/' + uid + '/' + noteid).remove();
+        var array = [...this.state.notes]
+        // console.log('index: ', index);
+        // console.log('note: ', array[index]);
+        array.splice(index, 1);
+        this.setState({ notes: array });
     }
 
     render() {
@@ -103,7 +110,9 @@ class Main extends Component {
                                         <ListItem key={note.id}>
                                             <ListItemText primary={(index+1) + '. ' + note.text}/>
                                             <ListItemSecondaryAction>
-                                              <Button type="submit" onSubmit={this.deleteNote(note.id)}>delete</Button>
+                                                <IconButton aria-label="Delete" onClick={() => this.deleteNote(note.id, index)}>
+                                                    <DeleteIcon />
+                                                </IconButton>
                                             </ListItemSecondaryAction>
                                         </ListItem> )
                                 }

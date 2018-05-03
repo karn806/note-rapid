@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import firebase from 'firebase';
 import { Link } from 'react-router-dom';
 import { auth } from '../firebase';
 
@@ -40,7 +41,49 @@ class Login extends Component {
         })
         .catch(authError => {
             alert(authError);
-        })
+        });
+    }
+
+    fbLogin(event){
+      event.preventDefault();
+      var provider = new firebase.auth.FacebookAuthProvider();
+      auth.signInWithPopup(provider).then(function(result) {
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        var token = result.credential.accessToken;
+        // The signed-in user info.
+        var user = result.user;
+        // ...
+      }).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        // ...
+      });
+    }
+
+    ggLogin(event){
+      event.preventDefault();
+      var provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider).then(function(result) {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        var token = result.credential.accessToken;
+        // The signed-in user info.
+        var user = result.user;
+        // ...
+      }).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        // ...
+      });
     }
 
     handleChange = name => event => {
@@ -80,6 +123,10 @@ class Login extends Component {
                             />
                             <br />
                             <Button variant="raised" color="primary" type="submit">Log in</Button>
+                            <p>
+                            <Button variant="raised" color="primary" onClick={this.fbLogin}>Log in with FB</Button>
+                            <Button variant="raised" color="primary" onClick={this.ggLogin}>Log in with Google</Button>
+                            </p>
                         </form>
                         <p>Don't have an account? <Link to="/signup">Sign up here</Link></p>
                     </Paper>
