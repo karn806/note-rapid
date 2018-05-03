@@ -49,7 +49,10 @@ class UserProfile extends Component {
                 <Grid container>
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
-                            <p>HAIIIIIIIII</p>
+                            <p>Name:</p>
+                            <p>Email: {auth.currentUser.email}</p>
+                            <p>Password:</p>
+                            <Button color="primary">Edit Profile</Button>
                         </Paper>
                     </Grid>
                 </Grid>
