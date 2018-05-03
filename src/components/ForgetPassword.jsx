@@ -18,7 +18,7 @@ const styles = theme => ({
   },
 });
 
-class UserProfile extends Component {
+class ForgetPassword extends Component {
 
     constructor(props) {
         super(props);
@@ -49,7 +49,20 @@ class UserProfile extends Component {
                 <Grid container>
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
-                            <p>HAIIIIIIIII</p>
+                            <h1>Enter your email here:</h1>
+                            <form onSubmit={this.onSubmit} autoComplete="off">
+                                <TextField
+                                  id="email"
+                                  label="Email"
+                                  className={classes.textField}
+                                  value={email}
+                                  onChange={this.handleChange('email')}
+                                  margin="normal"
+                                  type="email"
+                                />
+                                < br/>
+                                <Button variant="raised" color="primary" type="submit">Submit</Button>
+                            </form>
                         </Paper>
                     </Grid>
                 </Grid>
@@ -58,4 +71,4 @@ class UserProfile extends Component {
     }
 }
 
-export default withStyles(styles)(UserProfile);
+export default withStyles(styles)(ForgetPassword);

@@ -8,11 +8,14 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import { CircularProgress } from 'material-ui/Progress';
 import Button from 'material-ui/Button';
+import { Link } from 'react-router-dom';
 
 import PrivateRoute from './PrivateRoute';
 import Main from './Main';
 import Login from './Login';
 import Signup from './Signup';
+import ForgetPassword from './ForgetPassword';
+import UserProfile from './UserProfile';
 
 const theme = createMuiTheme();
 
@@ -60,6 +63,8 @@ class App extends Component {
                     />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
+                <Route exact path="/forgetpassword" component={ForgetPassword} />
+                <Route exact path="/userprofile" component={UserProfile} />
             </div>
         );
         return (
@@ -72,7 +77,11 @@ class App extends Component {
                             </Typography>
                             <p>
                             { authenticated &&
+                                <div>
+                                <Button><Link to="/">Home</Link></Button>
+                                <Button><Link to="/userprofile">My Profile</Link></Button>
                                 <Button variant="raised" color="default" onClick={() => auth.signOut()}>Log out</Button>
+                                </div>
                             }
                             </p>
                         </Toolbar>
