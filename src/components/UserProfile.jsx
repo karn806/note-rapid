@@ -24,15 +24,10 @@ class UserProfile extends Component {
         super(props);
         this.state = {
             email : "",
-            password : ""
+            password : "",
+            name : ""
         }
-        this.onSubmit = this.onSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
-    }
-
-    onSubmit(event) {
-        event.preventDefault();
-        const { email, password } = this.state;
     }
 
     handleChange = name => event => {
@@ -42,17 +37,19 @@ class UserProfile extends Component {
     };
 
     render() {
-        const { email, password } = this.state;
         const classes = this.props.classes;
         return (
             <div>
                 <Grid container>
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
-                            <p>Name:</p>
-                            <p>Email: {auth.currentUser.email}</p>
-                            <p>Password:</p>
-                            <Button color="primary">Edit Profile</Button>
+                        Name: {auth.currentUser.displayName}
+                        <br />
+                        Email: {auth.currentUser.email}
+                        <br />
+                        Password: ******
+                        <br />
+                        <Button color="primary" type="button" onClick={() => this.props.history.push('/editprofile')}>Edit profile</Button>
                         </Paper>
                     </Grid>
                 </Grid>

@@ -16,6 +16,7 @@ import Login from './Login';
 import Signup from './Signup';
 import ForgetPassword from './ForgetPassword';
 import UserProfile from './UserProfile';
+import EditProfile from './EditProfile';
 
 const theme = createMuiTheme();
 
@@ -64,7 +65,18 @@ class App extends Component {
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
                 <Route exact path="/forgetpassword" component={ForgetPassword} />
-                <Route exact path="/userprofile" component={UserProfile} />
+                <PrivateRoute
+                    exact
+                    path="/userprofile"
+                    component={UserProfile}
+                    authenticated={authenticated}
+                    />
+                <PrivateRoute
+                    exact
+                    path="/editprofile"
+                    component={EditProfile}
+                    authenticated={authenticated}
+                    />
             </div>
         );
         return (

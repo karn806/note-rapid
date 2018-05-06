@@ -40,6 +40,10 @@ const styles = theme => ({
         maxHeight: 200,
         overflow: 'auto',
     },
+    box: {
+        padding: theme.spacing.unit * 2,
+        textAlign: 'left',
+    }
 
 });
 
@@ -102,7 +106,7 @@ class Main extends Component {
         return (
             <Grid container className={classes.container}>
                 <Grid item xs={6}>
-                    <Paper className={classes.paper}>
+                    <div className={classes.box}>
                         <p>Hello, { auth.currentUser.email }</p>
                             <List className={classes.list}>
                                 { /* Render the list of messages */
@@ -129,7 +133,7 @@ class Main extends Component {
                                 <br />
                                 <Button variant="raised" color="primary" type="submit">Add</Button>
                             </form>
-                    </Paper>
+                    </div>
                 </Grid>
             </Grid>
         );

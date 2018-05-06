@@ -34,25 +34,32 @@ class Signup extends Component {
         event.preventDefault();
         const { email, password } = this.state;
 
-        // auth.sendSignInLinkToEmail(email, actionCodeSettings)
-        // .then( authUser => {
-        //   // The link was successfully sent. Inform the user.
-        //   // Save the email locally so you don't need to ask the user for it again
-        //   // if they open the link on the same device.
-        //   window.localStorage.setItem('emailForSignIn', email);
+        var actionCodeSettings = {
+          // URL you want to redirect back to. The domain (www.example.com) for this
+          // URL must be whitelisted in the Firebase Console.
+          url: 'simple-note-rapid.firebaseapp.com',
+        };
+
+        auth.sendSignInLinkToEmail(email, actionCodeSettings)
+        .then(() => {
+          // The link was successfully sent. Inform the user.
+          // Save the email locally so you don't need to ask the user for it again
+          // if they open the link on the same device.
+          window.localStorage.setItem('emailForSignIn', email);
+          alert("done");
+        })
+        .catch(function(error) {
+          // Some error occurred, you can inspect the code: error.code
+        });
+
+
+        // auth.createUserWithEmailAndPassword(email, password)
+        // .then(authUser => {
+        //     console.log(authUser);
         // })
         // .catch(authError => {
-        //   // Some error occurred, you can inspect the code: error.code
-        //   alert(authError);
+        //     alert(authError);
         // });
-
-        auth.createUserWithEmailAndPassword(email, password)
-        .then(authUser => {
-            console.log(authUser);
-        })
-        .catch(authError => {
-            alert(authError);
-        })
     }
 
     handleChange = name => event => {
@@ -90,6 +97,7 @@ class Signup extends Component {
                                   margin="normal"
                                   type="password"
                                 />
+                                <br />
                                 <br />
                                 <Button variant="raised" color="primary" type="submit">Sign up</Button>
                             </form>
