@@ -6,6 +6,11 @@ import Button from 'material-ui/Button';
 import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
+import List, {
+    ListItem,
+    ListItemText,
+    ListItemSecondaryAction,
+} from 'material-ui/List';
 
 const styles = theme => ({
   root: {
@@ -16,6 +21,13 @@ const styles = theme => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
+  list: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        maxWidth: 360,
+        maxHeight: 200,
+        overflow: 'auto',
+    }
 });
 
 class UserProfile extends Component {
@@ -28,6 +40,11 @@ class UserProfile extends Component {
             name : ""
         }
         this.handleChange = this.handleChange.bind(this);
+    }
+
+    changePassword(event) {
+      event.preventDefault;
+
     }
 
     handleChange = name => event => {
@@ -43,12 +60,15 @@ class UserProfile extends Component {
                 <Grid container>
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
-                        Name: {auth.currentUser.displayName}
+                        <List className={classes.list}>
+                          <ListItem>
+                            Name: {auth.currentUser.providerData[0].displayName}
+                          </ListItem>
+                          <ListItem>
+                            Email: {auth.currentUser.providerData[0].email}
+                          </ListItem>
                         <br />
-                        Email: {auth.currentUser.email}
-                        <br />
-                        Password: ******
-                        <br />
+                        </List>
                         <Button color="primary" type="button" onClick={() => this.props.history.push('/editprofile')}>Edit profile</Button>
                         </Paper>
                     </Grid>

@@ -33,6 +33,14 @@ class ForgetPassword extends Component {
     onSubmit(event) {
         event.preventDefault();
         const { email, password } = this.state;
+        auth.sendPasswordResetEmail(email).then(function() {
+          // Email sent.
+          alert('Please check your email.')
+        }).catch(function(error) {
+          // An error happened.
+          alert(error);
+        });
+        this.props.history.push('/');
     }
 
     handleChange = name => event => {
@@ -61,7 +69,12 @@ class ForgetPassword extends Component {
                                   type="email"
                                 />
                                 < br/>
-                                <Button variant="raised" color="primary" type="submit">Submit</Button>
+                                <p>
+                                  <Button variant="raised" type="button" onClick={() => this.props.history.push('/login')}>
+                                    Back to Log in
+                                  </Button>
+                                </p>
+                                <p><Button variant="raised" color="primary" type="submit">Submit</Button></p>
                             </form>
                         </Paper>
                     </Grid>

@@ -60,6 +60,35 @@ class Main extends Component {
     }
 
     componentWillMount() {
+
+        var user = auth.currentUser;
+        console.log(user.providerData);
+        // console.log(user.providerData[0].email);
+
+        if (user != null) {
+          user.providerData.forEach(function (profile) {
+            console.log("Sign-in provider: " + profile.providerId);
+            console.log("  Name: " + profile.displayName);
+            console.log("  Email: " + profile.email);
+
+            if (profile.providerId === 'facebook.com'){
+                console.log('Email is verified.');
+            } else if (profile.providerId === 'google.com'){
+                console.log('Email is verified.');
+            } else {
+                auth.onAuthStateChanged(user => {
+                    if (user.emailVerified){
+                        console.log('Email is verified.');
+                    } else {
+                        console.log('Email is not verified.');
+                        alert('Please verify your email address then log in again.')
+                        auth.signOut();
+                        }
+                    })
+                }
+          });
+        }
+
         const uid = auth.currentUser.uid;
         let notesRef = db.ref('notes/' + uid).orderByKey().limitToLast(100);
         // .on is like an observer for the particular ref. It will notify if there's a change
@@ -68,14 +97,6 @@ class Main extends Component {
             // if new note is added, it will get notified and refresh the page
             this.setState({ notes: [note].concat(this.state.notes) });
         });
-        // notesRef.on('child_removed', snapshot => {
-        //     let deletedNote = { text: snapshot.val(), id: snapshot.key };
-        //     console.log("The blog post titled '" + deletedNote.text + "' has been deleted");
-        //     const index = this.state.notes.findIndex(x => x.text === deletedNote.text)
-        //     console.log('index: ', index);
-        //     console.log('note: ', deletedNote);
-        //     this.setState({ notes: this.state.notes.splice(index, 1) });
-        // });
     }
 
     handleChange = name => event => {
@@ -107,7 +128,7 @@ class Main extends Component {
             <Grid container className={classes.container}>
                 <Grid item xs={6}>
                     <div className={classes.box}>
-                        <p>Hello, { auth.currentUser.email }</p>
+                        <p>Hello, { auth.currentUser.providerData[0].displayName }</p>
                             <List className={classes.list}>
                                 { /* Render the list of messages */
                                     this.state.notes.map( (note,index) =>

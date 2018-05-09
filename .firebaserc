@@ -1,1 +1,5 @@
-{}
+{
+  "projects": {
+    "default": "simple-note-rapid"
+  }
+}

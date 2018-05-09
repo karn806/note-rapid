@@ -36,8 +36,8 @@ class Login extends Component {
         event.preventDefault();
         const { email, password } = this.state;
         auth.signInWithEmailAndPassword(email, password)
-        .then(authUser => {
-            console.log(authUser);
+        .then(() => {
+          console.log('yay');
         })
         .catch(authError => {
             alert(authError);
@@ -47,7 +47,7 @@ class Login extends Component {
     fbLogin(event){
       event.preventDefault();
       var provider = new firebase.auth.FacebookAuthProvider();
-      auth.signInWithPopup(provider).then(function(result) {
+      auth.signInWithPopup(provider).then(function(error) {
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         // var token = result.credential.accessToken;
         // The signed-in user info.

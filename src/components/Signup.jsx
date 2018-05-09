@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
 
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
@@ -23,6 +23,7 @@ class Signup extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            name: "",
             email : "",
             password : ""
         }
@@ -32,34 +33,45 @@ class Signup extends Component {
 
     onSubmit(event) {
         event.preventDefault();
-        const { email, password } = this.state;
-
-        var actionCodeSettings = {
-          // URL you want to redirect back to. The domain (www.example.com) for this
-          // URL must be whitelisted in the Firebase Console.
-          url: 'simple-note-rapid.firebaseapp.com',
-        };
-
-        auth.sendSignInLinkToEmail(email, actionCodeSettings)
+        const { email, password, name } = this.state;
+        auth.createUserWithEmailAndPassword(email, password)
         .then(() => {
-          // The link was successfully sent. Inform the user.
-          // Save the email locally so you don't need to ask the user for it again
-          // if they open the link on the same device.
-          window.localStorage.setItem('emailForSignIn', email);
-          alert("done");
+          const user = auth.currentUser;
+          user.updateProfile({
+            displayName: name,
+          }).catch(function(error) {
+            console.error();
+          });
+          // auth().onAuthStateChanged(function(user) {
+          //   if (user) {
+          //     // User is signed in.
+          //     var displayName = user.displayName;
+          //     var email = user.email;
+          //     var emailVerified = user.emailVerified;
+          //     var photoURL = user.photoURL;
+          //     var isAnonymous = user.isAnonymous;
+          //     var uid = user.uid;
+          //     var providerData = user.providerData;
+          //     // ...
+          //   } else {
+          //     // User is signed out.
+          //     // ...
+          //   }
+          auth.currentUser.sendEmailVerification();
+          // auth.signOut();
+          alert('Email verification sent. Please check your email address!')
         })
-        .catch(function(error) {
-          // Some error occurred, you can inspect the code: error.code
+        .catch(error => {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          if (errorCode == 'auth/email-already-in-use') {
+            alert('This email is already in use.');
+          } else {
+            alert(errorMessage);
+          }
+          console.log(error);
         });
 
-
-        // auth.createUserWithEmailAndPassword(email, password)
-        // .then(authUser => {
-        //     console.log(authUser);
-        // })
-        // .catch(authError => {
-        //     alert(authError);
-        // });
     }
 
     handleChange = name => event => {
@@ -69,7 +81,7 @@ class Signup extends Component {
     };
 
     render() {
-        const { email, password } = this.state;
+        const { email, password, name } = this.state;
         const classes = this.props.classes;
         return (
             <div>
@@ -78,6 +90,16 @@ class Signup extends Component {
                         <Paper className={classes.paper}>
                             <h1>Sign up</h1>
                             <form onSubmit={this.onSubmit} autoComplete="off">
+                                <TextField
+                                  id="name"
+                                  label="Username"
+                                  className={classes.textField}
+                                  value={name}
+                                  onChange={this.handleChange('name')}
+                                  margin="normal"
+                                  type="text"
+                                />
+                                <br />
                                 <TextField
                                   id="email"
                                   label="Email"
@@ -99,7 +121,8 @@ class Signup extends Component {
                                 />
                                 <br />
                                 <br />
-                                <Button variant="raised" color="primary" type="submit">Sign up</Button>
+                                <Button variant="raised" color="primary" type="button" onClick={() => this.props.history.push('/login')}>Log in</Button>
+                                <Button variant="raised" color="primary" type="submit">Create account</Button>
                             </form>
                         </Paper>
                     </Grid>
